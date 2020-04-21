@@ -1,0 +1,119 @@
+# ARTICULOS -> PUBLICACIONES EN REVISTA:
+
+<article mdate="2020-03-12" key="tr/meltdown/s18" publtype="informal">
+
+	# HACEN FALTA PARA LAS CONSULTAS:
+
+	<author>Paul Kocher</author>
+	<author>Daniel Genkin</author>
+	<author>Daniel Gruss</author>
+	<author>Werner Haas</author>
+	<author>Mike Hamburg</author>
+	<author>Moritz Lipp</author>
+	<author>Stefan Mangard</author>
+	<author>Thomas Prescher 0002</author>
+	<author>Michael Schwarz 0001</author>
+	<author>Yuval Yarom</author>
+	<title>Spectre Attacks: Exploiting Speculative Execution.</title>
+	<year>2018</year>
+
+	# CAMPOS QUE NO HACEN FALTA:
+
+	<journal>meltdownattack.com</journal>
+	<ee type="oa">https://spectreattack.com/spectre.pdf</ee>
+</article>
+
+# CONGRESOS:
+
+<inproceedings mdate="2019-03-19" key="journals/procedia/AlhomoudMDAA11">
+	
+	# CAMPOS QUE HACEN FALTA:
+
+	<author>Adeeb M. Alhomoud</author>
+	<author>Rashid Munir</author>
+	<author>Jules Pagna Disso</author>
+	<author>Irfan Awan</author>
+	<author>Abdullah Al-Dhelaan</author>
+	<title>Performance Evaluation Study of Intrusion Detection Systems.</title>
+	<year>2011</year>
+
+	# CAMPOS QUE NO HACEN FALTA:
+
+	<pages>173-180</pages>
+	<crossref>conf/ant/2011</crossref>
+	<booktitle>ANT/MobiWIS</booktitle>
+	<ee>https://doi.org/10.1016/j.procs.2011.07.024</ee>
+	<url>db/journals/procedia/procedia5.html#AlhomoudMDAA11</url>
+</inproceedings>
+
+# ARTÍCULOS EN LIBROS: 
+
+<incollection mdate="2017-07-12" key="reference/crypt/Bucci05" publtype="encyclopedia">
+
+	# CAMPOS QUE HACEN FALTA:
+
+	<author>Marco Bucci</author>
+	<title>Random Bit Generator.</title>
+	<year>2005</year>
+
+	# CAMPOS QUE NO HACEN FALTA:
+
+	<booktitle>Encyclopedia of Cryptography and Security</booktitle>
+	<ee>https://doi.org/10.1007/0-387-23483-7_342</ee>
+	<crossref>reference/crypt/2005</crossref>
+	<url>db/reference/crypt/crypt2005.html#Bucci05</url>
+</incollection>
+
+##################
+Colección autores:
+##################
+
+autor: miguel de cervantes
+   -lista articulos
+      -art1: titulo, año, lista_autores
+      -art2: titulo, año, lista_autores
+   -lista inproc
+      -inp1: titulo, año, lista_autores
+      -inp2: titulo, año, lista_autores
+   -lista incol
+      -inc1: titulo, año, lista_autores
+      -inc2: titulo, año, lista_autores
+
+######################
+Colección Publicacion:
+######################
+
+Public 1: Titulo
+  -Tipo: art/inpro/incol
+  -Año:
+  -Autores: lista autores
+
+ó
+
+Public 1: Tipo:1
+  -titulo:
+  -Año:
+  -Autores: lista autores
+
+
+1. Listado de todas las publicaciones de un autor determinado.
+2. Número de publicaciones de un autor determinado.
+3. Número de artículos en revista para el año 2018.
+4. Número de autores ocasionales, es decir, que tengan menos de 5 publicaciones en total.
+5. Número de artículos de revista (article) y número de artículos en congresos
+(inproceedings) de los diez autores con más publicaciones totales.
+6. Número medio de autores de todas las publicaciones que tenga en su conjunto de datos.
+7. Listado de coautores de un autor (Se denomina coautor a cualquier persona que haya
+firmado una publicación).
+8. Edad de los 5 autores con un periodo de publicaciones más largo (Se considera la Edad
+de un autor al número de años transcurridos desde la fecha de su primera publicación
+hasta la última registrada).
+9. Número de autores novatos, es decir, que tengan una Edad menor de 5 años. Se
+considera la Edad de un autor al número de años transcurridos desde la fecha de su
+primera publicación hasta la última registrada.
+10. Porcentaje de publicaciones en revistas con respecto al total de publicaciones.
+
+
+
+
+db.ventas.aggregate([{$match:{autores_incollections:"Bir Bhanu"}}, {$group:{_id:"$id_cli",total:{$sum:"$cantidad"}}}])

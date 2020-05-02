@@ -6,7 +6,6 @@ db.collection_publication.aggregate([
     ])
     
 
-
 /* 1. Listado de todas las publicaciones de un autor determinado. */
     
 db.collection_publication.aggregate([
@@ -26,7 +25,7 @@ db.collection_publication.aggregate([
 
 /* 3. Número de artículos en revista para el año 2018. */
 
-db.collection_publication.aggregate([
+db.collection_publication.aggregate([
     {$match:{type:"article"}},
     {$match:{year:"2018"}},
     {$count:"Numero_articles_2018"},
@@ -38,7 +37,7 @@ db.collection_publication.aggregate([
 
 db.collection_publication.aggregate([
     {$unwind:"$authors"},
-    {$sortByCount:"$authors"},
+    {$sortByCount:"$authors"},
     {$count:"Número_autores_con_menos_de_5_publicaciones"},
     {$match:{count: {$lt: 5}}},
     {$count:"Número_autores_con_menos_de_5_publicaciones"},

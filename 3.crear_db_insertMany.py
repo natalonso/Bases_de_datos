@@ -4,109 +4,61 @@ from pymongo import MongoClient
 import json
 
 
-##########################################################
-# INCOLLECTIONS
-##########################################################
+def load_publication(lista, type_publication):
+    lista_documentos_dict = []
+    for publicacion in lista:
+        documento_dict = {}
+        autores_insert = []
+        try:
+            autores = publicacion['author']
+            if type(autores) != list:
+                autores = []
+                autores.append(publicacion['author'])
 
-with open('./incollections.json', encoding='utf-8') as f:
-    incollections = json.load(f)
+            for autor in autores:
+                if '#text' in autor:
+                    autor = autor['#text']
+                autores_insert.append(autor)
 
-lista_documentos_dict = []
-for publicacion in incollections:
-    documento_dict = {}
-    autores_insert = []
-    try:
-        autores = publicacion['author']
-        if type(autores) != list:
-            autores = []
-            autores.append(publicacion['author'])
+            documento_dict['type'] = type_publication
+            documento_dict['authors'] = autores_insert
+            documento_dict['title'] = publicacion['title']
+            documento_dict['year'] = publicacion['year']
 
-        for autor in autores:
-            if '#text' in autor:
-                autor = autor['#text']
-            autores_insert.append(autor)
+            lista_documentos_dict.append(documento_dict)
 
-        documento_dict['type'] = 'incollection'
-        documento_dict['authors'] = autores_insert
-        documento_dict['title'] = publicacion['title']
-        documento_dict['year'] = publicacion['year']
+        except KeyError:
+            pass
+    return lista_documentos_dict
 
-        lista_documentos_dict.append(documento_dict)
+if __name__ == "__main__":
+    with open('./incollections.json', encoding='utf-8') as f:
+        incollections = json.load(f)
 
-    except KeyError:
-        pass
+    with open('./inproceedings.json', encoding='utf-8') as f:
+        inproceedings = json.load(f)
 
+    with open('./articles.json', encoding='utf-8') as f:
+        articles = json.load(f)
 
-##########################################################
-# INPROCEEDINGS:
-##########################################################
+    type_p="incollection"
+    lista_incollections = load_publication(incollections, type_p)
+    print('Número total de publicaciones: ', len(lista_incollections))
 
-with open('./inproceedings.json', encoding='utf-8') as f:
-    inproceedings = json.load(f)
+    type_p = "inproceeding"
+    lista_inproceedings = load_publication(inproceedings, type_p)
+    print('Número total de publicaciones: ', len(lista_inproceedings))
 
-lista_documentos_dict = []
-for publicacion in inproceedings:
-    documento_dict = {}
-    autores_insert = []
-    try:
-        autores = publicacion['author']
-        if type(autores) != list:
-            autores = []
-            autores.append(publicacion['author'])
+    type_p="article"
+    lista_articles = load_publication(articles, type_p)
+    print('Número total de publicaciones: ', len(lista_articles))
 
-        for autor in autores:
-            if '#text' in autor:
-                autor = autor['#text']
-            autores_insert.append(autor)
+    conection = pymongo.MongoClient()
+    db = conection.prueba_dblp
+    collection = db.collection_publication
+    collection.insert_many(lista_incollections)
+    collection.insert_many(lista_inproceedings)
+    collection.insert_many(lista_articles)
+    conection.close()
 
-        documento_dict['type'] = 'inproceeding'
-        documento_dict['authors'] = autores_insert
-        documento_dict['title'] = publicacion['title']
-        documento_dict['year'] = publicacion['year']
-
-        lista_documentos_dict.append(documento_dict)
-
-    except KeyError:
-        pass
-
-
-##########################################################
-# ARTICLES:
-##########################################################
-
-with open('./articles.json', encoding='utf-8') as f:
-    articles = json.load(f)
-
-
-for publicacion in articles:
-    documento_dict = {}
-    autores_insert = []
-    try:
-        autores = publicacion['author']
-        if type(autores) != list:
-            autores = []
-            autores.append(publicacion['author'])
-
-        for autor in autores:
-            if '#text' in autor:
-                autor = autor['#text']
-            autores_insert.append(autor)
-
-        documento_dict['type'] = 'article'
-        documento_dict['authors'] = autores_insert
-        documento_dict['title'] = publicacion['title']
-        documento_dict['year'] = publicacion['year']
-
-        lista_documentos_dict.append(documento_dict)
-
-    except KeyError:
-        pass
-
-conection = pymongo.MongoClient()
-db = conection.prueba_dblp
-collection = db.collection_publication
-collection.insert_many(lista_documentos_dict)
-conection.close()
-
-print('Número total de publicaciones: ', len(lista_documentos_dict))
-print('terminado')
+    print('terminado')

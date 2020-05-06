@@ -1,0 +1,192 @@
+
+
+######################
+CONSULTAS FRECUENTES:
+######################
+
+-Para cada producto, presentar sus características y los comercializa. ---> VIEW PRODUCTS
+-De acuerdo a un producto y un formato, seleccionar las referencias de las que se dispone. ----> VIEW REFS
+-De acuerdo al nick name del usuario (usuario registrado) y una determinada fecha,
+seleccionar la lista de la compra y el precio parcial por cada línea de pedido. ----> VIEW ORDERS
+
+######################
+EJERCICIOS:
+######################
+
+-Diseño de las tablas Cassandra: las tablas se generan como vistas a la bd sql con consultas sql, se exportan en csv y se genera el JSON que se cargará en Cassandra.
+-Implementarlas en Cassandra.
+-Carga de datos: CQLSH . Generar datos con SQL DEVELOPER, generar csv, convertir a JSON y cargar en Cassandra.
+
+############################################
+CONSULTAS: PRODUCTS, ORDERS, REFERENCIAS
+############################################
+
+1. Formatos en los que se comercializa el producto 'Como y tronar'
+SELECT formatt FROM practica_cassandra.products WHERE product='Como y tronar' ALLOW FILTERING;
+
+
+2. Cambio de nombre del producto 'Son antes' por 'Antes'
+
+SELECT id_product FROM practica_cassandra.products WHERE product='Son antes' ALLOW FILTERING;
+'6', '16', '19', '13', '21', '7', '17', '9', '15', '10', '4', '3', '5', '18', '14', '8', '20', '2', '22', '12', '23', '24', '11', '1'
+
+UPDATE practica_cassandra.products
+  SET product = 'Antes'
+  WHERE id_product IN ('6', '16', '19', '13', '21', '7', '17', '9', '15', '10', '4', '3', '5', '18', '14', '8', '20', '2', '22', '12', '23', '24', '11', '1');
+
+SELECT id_product,product FROM practica_cassandra.products WHERE product='Antes' ALLOW FILTERING;
+
+
+3. El producto 'Duende y luna' empieza a comercializarse en el formato 'roasted bean’: cambiar un formato
+
+INSERT INTO practica_cassandra.products (formatt, product, id_product) VALUES ('roasted bean', 'Duende y luna', '6497') IF NOT EXISTS;
+SELECT id_product,product,formatt FROM practica_cassandra.products WHERE product='Duende y luna' ALLOW FILTERING;
+
+4. Referencias asociadas al producto 'Milagros' con formato capsulas capsules').
+
+SELECT barcode FROM practica_cassandra.products WHERE product='Milagros' AND formatt='capsules' ALLOW FILTERING;
+
+
+5. Último pedido realizado por el usuario con nickname='cisni' : date, userr
+
+SELECT MAX(ORDERDATE),USERR,id_order FROM practica_cassandra.orders WHERE USERR ='cisni' ALLOW FILTERING;
+SELECT ORDERDATE,USERR,id_order FROM practica_cassandra.orders WHERE USERR ='cisni' AND ORDERDATE='2014-12-17' ALLOW FILTERING;
+
+6. Cantidad total gastada por el usuario cuyo nickname es nickname='naki' price_retail
+
+SELECT SUM(RETAILPRICE),USERR,id_order FROM practica_cassandra.orders WHERE USERR ='naki' ALLOW FILTERING;
+
+7. Inserción de una nueva referencia (barcode= QIO99947O91) para el producto 'Como y tronar' con formato cápsulas.
+
+INSERT INTO practica_cassandra.products (barcode, formatt, product, id_product) VALUES ('QIO99947O91', 'capsules', 'Como y tronar', '6498') IF NOT EXISTS;
+SELECT id_product,product,formatt,barcode FROM practica_cassandra.products WHERE product='Como y tronar' ALLOW FILTERING;
+
+##################################
+CREAR LAS VISTAS DE SQL:
+##################################
+
+CREATE VIEW view_products
+    AS (SELECT * FROM PRODUCTS)
+
+CREATE VIEW view_refs
+    AS (SELECT * FROM REFS)
+    
+CREATE VIEW view_orders
+    AS (SELECT * FROM ORDERS)   
+
+##################################
+ACTIVAR EL SERVIDOR
+##################################
+
+Ejecutar como administrador el fichero cassandra.bat
+
+##################################
+ACCEDER A LA SHELL CQL
+##################################
+
+conda create -n cqlenv python=2.7
+conda activate cqlenv
+
+cd C:/Users/natal/OneDrive/Documentos/0_Universidad/10-Máster/2_Curso_2019-2020/Segundo_Trimestre/0_Bases_de_datos/Tema 3. Bases de Datos NoSQL/Bases Familia-Columna-Cassandra/apache-cassandra-3.11.6/bin
+
+(cqlenv) C:/Users/natal/OneDrive/Documentos/0_Universidad/10-Máster/2_Curso_2019-2020/Segundo_Trimestre/0_Bases_de_datos/Tema 3. Bases de Datos NoSQL/Bases Familia-Columna-Cassandra/apache-cassandra-3.11.6/bin>pip install cassandra-driver
+
+cqlsh
+
+CREATE KEYSPACE IF NOT EXISTS cafe_shop WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'datacenter1' : 3 };
+cqlsh> USE cafe_shop;
+cqlsh:cafe_shop>
+
+C:/Users/natal/OneDrive/Documentos/0_Universidad/10-Máster/2_Curso_2019-2020/Segundo_Trimestre/0_Bases_de_datos/Tema 3. Bases de Datos NoSQL/Bases Familia-Columna-Cassandra/apache-cassandra-3.11.6/bin>chcp 65001
+Página de códigos activa: 65001
+
+Cambiar la codificacion por defecto de la shell: https://ss64.com/nt/chcp.html
+
+
+##################################
+CARGAR CSV
+##################################
+
+conda activate cqlenv
+cqlsh
+CREATE KEYSPACE practica_cassandra WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
+USE practica_cassandra;
+
+
+##################################
+TABLA PRODUCTS
+##################################
+
+CREATE TABLE practica_cassandra.products( 
+  PRODUCT text,
+  BARCODE text,
+  FORMATT text,
+  MACHINEMAKE text,
+  MACHINEMODEL text,
+  (....)
+  ZIP text,
+  TOWN text,
+  COUNTRY text,
+  id_product text,
+  PRIMARY KEY (id_product)
+);
+
+cqlsh:practica_cassandra> CREATE TABLE practica_cassandra.products(
+                      ...   PRODUCT text,
+                      ...   BARCODE text,
+                      ...   FORMATT text,
+                      ...   MACHINEMAKE text,
+                      ...   MACHINEMODEL text,
+                      ...   CAFFEA text,
+                      ...   VARIETAL text,
+                      ...   ORIGIN text,
+                      ...   ROASTING text,
+                      ...   PROCESS text,
+                      ...   PACKAGING text,
+                      ...   RETAILPRICE text,
+                      ...   STOCK text,
+                      ...   MIN_STOCK text,
+                      ...   MAX_STOCK text,
+                      ...   COSTPRICE text,
+                      ...   PROVIDER text,
+                      ...   TAXID text,
+                      ...   SALESPERSON text,
+                      ...   EMAIL text,
+                      ...   PHONENUM text,
+                      ...   BANKACCOUNT text,
+                      ...   THOROUGHFARE text,
+                      ...   WAYNAME text,
+                      ...   GATENUMBER text,
+                      ...   BLOCKK text,
+                      ...   STAIRS text,
+                      ...   FLOORR text,
+                      ...   DOOR text,
+                      ...   ZIP text,
+                      ...   TOWN text,
+                      ...   COUNTRY text,
+                      ...   id_product text,
+                      ...   PRIMARY KEY (id_product)
+                      ... );
+
+COPY practica_cassandra.products (PRODUCT, BARCODE, FORMATT, MACHINEMAKE, MACHINEMODEL, CAFFEA, VARIETAL, ORIGIN, ROASTING, PROCESS, PACKAGING, RETAILPRICE, STOCK, MIN_STOCK, MAX_STOCK, COSTPRICE, PROVIDER, TAXID, SALESPERSON, EMAIL, PHONENUM, BANKACCOUNT, THOROUGHFARE, WAYNAME, GATENUMBER, BLOCKK, STAIRS, FLOORR, DOOR, ZIP, TOWN, COUNTRY, id_product) FROM 'products_process.csv' WITH DELIMITER=',' AND HEADER=TRUE;
+
+
+
+##################################
+TABLA ORDERS
+##################################
+
+CREATE TABLE practica_cassandra.orders ( 
+  ORDERDATE date,
+  RETAILPRICE double,
+  USERR text,
+  id_order text,
+  PRIMARY KEY (id_order) 
+);
+
+COPY practica_cassandra.orders(ORDERDATE, RETAILPRICE, USERR, id_order) FROM 'orders_simplif_process.csv' WITH DELIMITER=',' AND HEADER=TRUE;
+
+
+
+
+

@@ -22,7 +22,12 @@ def load_publication(lista, type_publication):
 
             documento_dict['type'] = type_publication
             documento_dict['authors'] = autores_insert
-            documento_dict['title'] = publicacion['title']
+
+            title = publicacion['title']
+            if '#text' in title:
+                title = title['#text']
+
+            documento_dict['title'] = title
             documento_dict['year'] = int(publicacion['year'])
 
             lista_documentos_dict.append(documento_dict)

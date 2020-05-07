@@ -67,12 +67,9 @@ CREAR LAS VISTAS DE SQL:
 
 CREATE VIEW view_products
     AS (SELECT * FROM PRODUCTS)
-
-CREATE VIEW view_refs
-    AS (SELECT * FROM REFS)
     
 CREATE VIEW view_orders
-    AS (SELECT * FROM ORDERS)   
+    AS (SELECT ORDERDATE, RETAILPRICE, USERR FROM ORDERS)
 
 ##################################
 ACTIVAR EL SERVIDOR

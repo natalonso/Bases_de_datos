@@ -54,7 +54,7 @@ if __name__ == "__main__":
     print('Número total de publicaciones: ', len(lista_articles))
 
     conection = pymongo.MongoClient()
-    db = conection.prueba_dblp
+    db = conection.dblp
     collection = db.collection_publication
     collection.insert_many(lista_incollections)
     collection.insert_many(lista_inproceedings)

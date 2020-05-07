@@ -117,56 +117,44 @@ USE practica_cassandra;
 TABLA PRODUCTS
 ##################################
 
-CREATE TABLE practica_cassandra.products( 
+
+
+CREATE TABLE practica_cassandra.products (
   PRODUCT text,
   BARCODE text,
   FORMATT text,
   MACHINEMAKE text,
   MACHINEMODEL text,
-  (....)
+  CAFFEA text,
+  VARIETAL text,
+  ORIGIN text,
+  ROASTING text,
+  PROCESS text,
+  PACKAGING text,
+  RETAILPRICE text,
+  STOCK text,
+  MIN_STOCK text,
+  MAX_STOCK text,
+  COSTPRICE text,
+  PROVIDER text,
+  TAXID text,
+  SALESPERSON text,
+  EMAIL text,
+  PHONENUM text,
+  BANKACCOUNT text,
+  THOROUGHFARE text,
+  WAYNAME text,
+  GATENUMBER text,
+  BLOCKK text,
+  STAIRS text,
+  FLOORR text,
+  DOOR text,
   ZIP text,
   TOWN text,
   COUNTRY text,
   id_product text,
   PRIMARY KEY (id_product)
 );
-
-cqlsh:practica_cassandra> CREATE TABLE practica_cassandra.products(
-                      ...   PRODUCT text,
-                      ...   BARCODE text,
-                      ...   FORMATT text,
-                      ...   MACHINEMAKE text,
-                      ...   MACHINEMODEL text,
-                      ...   CAFFEA text,
-                      ...   VARIETAL text,
-                      ...   ORIGIN text,
-                      ...   ROASTING text,
-                      ...   PROCESS text,
-                      ...   PACKAGING text,
-                      ...   RETAILPRICE text,
-                      ...   STOCK text,
-                      ...   MIN_STOCK text,
-                      ...   MAX_STOCK text,
-                      ...   COSTPRICE text,
-                      ...   PROVIDER text,
-                      ...   TAXID text,
-                      ...   SALESPERSON text,
-                      ...   EMAIL text,
-                      ...   PHONENUM text,
-                      ...   BANKACCOUNT text,
-                      ...   THOROUGHFARE text,
-                      ...   WAYNAME text,
-                      ...   GATENUMBER text,
-                      ...   BLOCKK text,
-                      ...   STAIRS text,
-                      ...   FLOORR text,
-                      ...   DOOR text,
-                      ...   ZIP text,
-                      ...   TOWN text,
-                      ...   COUNTRY text,
-                      ...   id_product text,
-                      ...   PRIMARY KEY (id_product)
-                      ... );
 
 COPY practica_cassandra.products (PRODUCT, BARCODE, FORMATT, MACHINEMAKE, MACHINEMODEL, CAFFEA, VARIETAL, ORIGIN, ROASTING, PROCESS, PACKAGING, RETAILPRICE, STOCK, MIN_STOCK, MAX_STOCK, COSTPRICE, PROVIDER, TAXID, SALESPERSON, EMAIL, PHONENUM, BANKACCOUNT, THOROUGHFARE, WAYNAME, GATENUMBER, BLOCKK, STAIRS, FLOORR, DOOR, ZIP, TOWN, COUNTRY, id_product) FROM 'products_process.csv' WITH DELIMITER=',' AND HEADER=TRUE;
 

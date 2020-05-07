@@ -18,3 +18,5 @@ with open('inproceedings.json', 'w', encoding='utf-8') as inproceedings_json:
 
 with open('incollections.json', 'w', encoding='utf-8') as incollections_json:
     json.dump(incollections, incollections_json, ensure_ascii=False)
+
+print('terminado')
